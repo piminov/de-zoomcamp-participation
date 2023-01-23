@@ -20,12 +20,13 @@ def main(params):
     gzip_name = 'output.gz'
     csv_name = 'output.csv'
 
-    os.system(f'wget {url} -O {gzip_name}')
-    os.system(f'gzip -d -c {gzip_name} > {csv_name}')
+    os.system(f'wget {url} -O {csv_name}')
+    #os.system(f'wget {url} -O {gzip_name}')
+    #os.system(f'gzip -d -c {gzip_name} > {csv_name}')
 
     engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db}')
 
-    df_iter = pd.read_csv(csv_name, iterator=True, chunksize=100_000)
+    df_iter = pd.read_csv(csv_name, compression='gzip', iterator=True, chunksize=100_000)
 
 
     df = next(df_iter)
