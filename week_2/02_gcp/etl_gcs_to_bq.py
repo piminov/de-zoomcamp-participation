@@ -51,7 +51,7 @@ def etl_gcs_to_bq():
         path = extract_from_gcs(color, year, month)
         df = transform(path)
         write_bq(df)
-        count_rows += df.count()
+        count_rows += len(df.index)
     print(f'{count_rows} rows was written to Google big query')
 
 if __name__ == "__main__":
