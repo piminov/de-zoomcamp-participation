@@ -51,17 +51,19 @@ def etl_gcs_to_bq(year: int, month: int, color: str) -> int:
 
 @flow(log_prints=True)
 def etl_parent_flow(
-    months: list[int] = [2, 3], year: int = 2019, color: str = "yellow"
+    months: list[int] = [2, 3], years: list[int] = [2019], colors: list[str] = ["yellow"]
 ):
     count_rows = 0
-    for month in months:
-        count_rows += etl_gcs_to_bq(year, month, color)
+    for color in colors:
+        for year in years:
+            for month in months:
+                count_rows += etl_gcs_to_bq(year, month, color)
     print(f'{count_rows} rows was written to Google big query')
 
 
 
 if __name__ == "__main__":
-    color = "yellow"
-    months = [2,3]
-    year = 2019
-    etl_parent_flow(months, year, color)
+    colors = ["yellow", "green"]
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
+    years = [2019]
+    etl_parent_flow(months, years, colors)
