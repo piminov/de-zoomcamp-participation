@@ -18,9 +18,15 @@ def fetch(dataset_url: str) -> pd.DataFrame:
 @task(log_prints=True)
 def clean(df: pd.DataFrame, color: str) -> pd.DataFrame:
     """Fix dtype issues"""
+    df['passenger_count'] = df['passenger_count'].astype('Int64')
+    df['payment_type'] = df['payment_type'].astype('Int64')
+    df['RatecodeID'] = df['RatecodeID'].astype('Int64')
+    df['VendorID'] = df['VendorID'].astype('Int64')
+
     if color == "green":
         df["lpep_pickup_datetime"] = pd.to_datetime(df["lpep_pickup_datetime"])
         df["lpep_dropoff_datetime"] = pd.to_datetime(df["lpep_dropoff_datetime"])
+        df['trip_type'] = df['trip_type'].astype('Int64')
     else:
         df["tpep_pickup_datetime"] = pd.to_datetime(df["tpep_pickup_datetime"])
         df["tpep_dropoff_datetime"] = pd.to_datetime(df["tpep_dropoff_datetime"])
@@ -70,7 +76,7 @@ def etl_parent_flow(
 
 
 if __name__ == "__main__":
-    colors = ["yellow", "green"]
+    colors = ["yellow"]
     months = [1,2,3,4,5,6,7,8,9,10,11,12]
     years = [2019]
     etl_parent_flow(months, years, colors)
